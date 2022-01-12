@@ -6,23 +6,24 @@ using System.Threading.Channels;
 /// Метод для добавления данных в файл
 /// </summary>
 /// <param name="text">Строка для добавления</param>
-void Append(string text)
+void Append(string[] s)
 {
-	StreamWriter streamWriter = new StreamWriter(@"D:\\Test\test.txt");
-	
+	string path = @"D:\Test\test.txt";
+	File.AppendAllLines(path, s);
 }
 
 void View()
 {
-	string[] text = File.ReadAllLines("D:\\Test\test.txt");
+	string path = @"D:\Test\test.txt";
+	string[] lines = File.ReadAllLines(path);
+	foreach (string line in lines)
+    {
+        Console.Write(line);
+    }
 
-	foreach (var line in text)
-	{
-		Console.WriteLine(line);
-	}
 }
 
-/// <summary>
+/// <summary>usi
 /// Метод обработки выбранного действия
 /// </summary>
 void Action(string action)
@@ -30,7 +31,7 @@ void Action(string action)
 	switch (action)
 	{
 		case "1":
-			if (File.Exists(@"D:\Test\D:\\Test\test.txttest.txt"))
+			if (File.Exists(@"D:\Test\test.txt"))
 			{
 				View();
 			}
@@ -40,12 +41,11 @@ void Action(string action)
 			}
 			break;
 		case "2":
-			Console.WriteLine("Введите информацию для добавления (в формате: ФИО Возраст Рост Дата Рождения Место рождения");
+			Console.WriteLine("Введите информацию для добавления (в формате: №, Дата добавления, ФИО, Возраст, Рост, Дата Рождения, Место Рождения");
 			string text = Console.ReadLine();
-			string[] line = text.Split(" ");
-			
+			string[] line = text.Split(',');
+			Append(line);
 			break;
-
 	}
 }
 
@@ -53,6 +53,7 @@ void Action(string action)
 Console.WriteLine("Введите действие (1 - вывод файла (если файла нет, он будет создан); 2 - добавить информацию в файл)");
 
 string action = Console.ReadLine();
+Console.WriteLine();
 Action(action);
 	
 
