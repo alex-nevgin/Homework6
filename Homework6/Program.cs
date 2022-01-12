@@ -5,25 +5,28 @@ using System.Threading.Channels;
 /// <summary>
 /// Метод для добавления данных в файл
 /// </summary>
-/// <param name="text">Строка для добавления</param>
+/// <param name="s">Строка для добавления</param>
 void Append(string[] s)
 {
 	string path = @"D:\Test\test.txt";
 	File.AppendAllLines(path, s);
 }
 
+/// <summary>
+/// Метод для вывода файла в консоль 
+/// </summary>
 void View()
 {
 	string path = @"D:\Test\test.txt";
 	string[] lines = File.ReadAllLines(path);
 	foreach (string line in lines)
     {
-        Console.Write(line);
+        Console.Write(line + "\n");
     }
 
 }
 
-/// <summary>usi
+/// <summary>
 /// Метод обработки выбранного действия
 /// </summary>
 void Action(string action)
@@ -42,9 +45,13 @@ void Action(string action)
 			break;
 		case "2":
 			Console.WriteLine("Введите информацию для добавления (в формате: №, Дата добавления, ФИО, Возраст, Рост, Дата Рождения, Место Рождения");
-			string text = Console.ReadLine();
-			string[] line = text.Split(',');
+			string text = Console.ReadLine() + "#";
+			string[] line = text.Split('#');
 			Append(line);
+			break;
+
+		default:
+			Console.WriteLine("Такой операции не предусмотрено");
 			break;
 	}
 }
