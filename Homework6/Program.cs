@@ -39,13 +39,13 @@ void Action(string action)
     switch (action)
     {
         case "1":
-            if (File.Exists(@"D:\Test\test.txt"))
+            if (File.Exists(@"test.txt"))
             {
                 View();
             }
             else
             {
-                File.Create(@"D:\Test\test.txt");
+                File.Create(@"test.txt");
             }
             break;
         case "2":
