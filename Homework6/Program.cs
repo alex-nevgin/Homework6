@@ -1,99 +1,91 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Threading.Channels;
-
-/// <summary>
-/// Метод для добавления данных в файл
-/// </summary>
-/// <param name="s">Строка для добавления</param>
-void Append(string s)
+// Метод обработки действия пользователя
+static void Action(string act)
 {
-    string path = @"test.txt";
-    File.AppendAllText(path, s);
+	switch (act)
+	{
+		case "1":
+			if (File.Exists(@"test.txt"))
+			{
+				Output();
+			}
+			else
+				using (FileStream fs = File.Create(@"test.txt"))
+				{
+					Input();
+					fs.Close();
+				}
+			break;
+		case "2":
+			//Input();
+			Append(Input());
+			break;
+		case "0":
+			break;
+		default:
+			Console.WriteLine("Такой операции не предусмотрено");
+			break;
+	}
 }
 
-/// <summary>
-/// Метод для вывода файла в консоль 
-/// </summary>
-void View()
+// Метод добавления текста в файл
+static void Append(string data)
 {
-    string path = @"test.txt";
-    string[] lines = File.ReadAllLines(path);
-    for (int i = 0; i < lines.Length; i++)
-    {
-        string[] line = lines[i].Split('#');
-        foreach (string s in line)
-        {
-            Console.Write(s + " ");
-        }
-        Console.WriteLine();
-    }
-    Console.WriteLine("");
+	using (StreamWriter streamWriter = new StreamWriter(@"test.txt", true))
+	{
+		streamWriter.Write(data);
+		// streamWriter.Close();
+	}
 }
 
-/// <summary>
-/// Метод обработки выбранного действия
-/// </summary>
-void Action(string action)
+// Метод обработки ввода данных пользователем
+static string Input()
 {
-    switch (action)
-    {
-        case "1":
-            if (File.Exists(@"test.txt"))
-            {
-                View();
-            }
-            else
-            {
-                File.Create(@"test.txt");
-            }
-            break;
-        case "2":
-            Console.WriteLine("Введите информацию для добавления");
-            string[] hints =
-            {
-                "Номер записи",
-                "Дата добавления",
-                "ФИО",
-                "Возраст",
-                "Рост",
-                "Дата рождения",
-                "Место рождения"
-            };
-            string data = "";
-            for (int i = 0; i < hints.Length; i++)
-            {
-                Console.WriteLine(hints[i]);
-                if (i < hints.Length - 1)
-                    data += Console.ReadLine() + "#";
-                else
-                    data += Console.ReadLine() + "\n";
-            }
-            Append(data);
-            break;
-        default:
-            Console.WriteLine("Такой операции не предусмотрено");
-            break;
-
-    }
-
+	string data = "";
+	Console.WriteLine("Введите информацию для добавления");
+	string[] hints =
+	{
+		"Номер записи",
+		"Дата добавления",
+		"ФИО",
+		"Возраст",
+		"Рост",
+		"Дата рождения",
+		"Место рождения"
+	};
+	for (var i = 0; i < hints.Length; i++)
+	{
+		Console.WriteLine(hints[i]);
+		if (i < hints.Length-1)
+			data += Console.ReadLine() + "#";
+		else
+			data += Console.ReadLine() + "\n";
+	}
+	return data;
 }
 
-
-do
+// Метод считывания и вывода данных в консоль
+static void Output()
 {
-    Console.WriteLine("Введите действие (1 - вывод файл а (если файла нет, он будет создан); 2 - добавить информацию в файл, 0 - выход)");
-    string action = Console.ReadLine();
-    if (action == "0")
-    {
-        break;
-    }
-    Console.WriteLine();
-    Action(action);
-} while (true);
+	string line;
+	using (StreamReader streamReader = new StreamReader(@"test.txt"))
+	{
+		while ((line = streamReader.ReadLine()) != null)
+		{
+			string[] lines = line.Split("#");
+			for (int i = 0; i < lines.Length; i++)
+			{
+				Console.Write(lines[i] + " ");
+			}
+			Console.WriteLine();
+		}
+		streamReader.Close();
+	}
+}
 
-
-
-
-
+Console.WriteLine("Введите действие (1 - вывод файла, 2 - запись в файл, 0 - выход): ");
+string act = Console.ReadLine();
+Console.WriteLine();
+Action(act);
 
