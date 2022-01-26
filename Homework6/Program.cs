@@ -1,6 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 // Метод обработки действия пользователя
+
+using System.Diagnostics;
+
 static void Action(string act)
 {
 	switch (act)
@@ -18,10 +21,11 @@ static void Action(string act)
 				}
 			break;
 		case "2":
-			//Input();
+			
 			Append(Input());
 			break;
 		case "0":
+			Environment.Exit(0);
 			break;
 		default:
 			Console.WriteLine("Такой операции не предусмотрено");
@@ -42,26 +46,39 @@ static void Append(string data)
 // Метод обработки ввода данных пользователем
 static string Input()
 {
-	string data = "";
 	Console.WriteLine("Введите информацию для добавления");
 	string[] hints =
 	{
-		"Номер записи",
-		"Дата добавления",
 		"ФИО",
 		"Возраст",
 		"Рост",
 		"Дата рождения",
 		"Место рождения"
 	};
-	for (var i = 0; i < hints.Length; i++)
-	{
-		Console.WriteLine(hints[i]);
-		if (i < hints.Length-1)
-			data += Console.ReadLine() + "#";
-		else
-			data += Console.ReadLine() + "\n";
-	}
+
+	int id;
+	string[] lines = File.ReadAllLines(@"test.txt");
+	id = lines.Length+1;
+	
+	DateTime creationDateTime = DateTime.Now;
+	
+	Console.WriteLine(hints[0]);
+	string name = Console.ReadLine();
+	
+	Console.WriteLine(hints[1]);
+	byte age = Byte.Parse(Console.ReadLine());
+	
+	Console.WriteLine(hints[2]);
+	byte height = Byte.Parse(Console.ReadLine());
+	
+	Console.WriteLine(hints[3]);
+	DateOnly birthDate = DateOnly.Parse(Console.ReadLine());
+	
+	Console.WriteLine(hints[4]);
+	string birthPlace = Console.ReadLine();
+
+	string data = $"{id}#{creationDateTime}#{name}#{age}#{height}#{birthDate}#{birthPlace}" + "\n";
+	
 	return data;
 }
 
@@ -84,8 +101,16 @@ static void Output()
 	}
 }
 
-Console.WriteLine("Введите действие (1 - вывод файла, 2 - запись в файл, 0 - выход): ");
-string act = Console.ReadLine();
-Console.WriteLine();
-Action(act);
+while (true)
+{
+	Console.WriteLine("Введите действие (1 - вывод файла, 2 - запись в файл, 0 - выход): ");
+    string act = Console.ReadLine();
+    Console.WriteLine();
+    Action(act);
+    Console.WriteLine();
+}
+
+
+
+
 
